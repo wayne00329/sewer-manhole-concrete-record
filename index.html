@@ -10,7 +10,7 @@
   <title>立坑封底方數紀錄</title>
   <style>
     :root{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:#17302b;background:#f3f7f5;font-synthesis:none;text-rendering:optimizeLegibility;--green:#176b5b;--border:#dce7e2;--muted:#60736d;--red:#a53333}
-    *{box-sizing:border-box}body{margin:0}header{background:var(--green);color:white;padding:22px max(18px,calc((100% - 980px)/2))}h1{font-size:clamp(1.35rem,4vw,2rem);margin:0 0 5px}header p{margin:0;color:#e3f2ed;font-size:.95rem}.wrap{max-width:980px;margin:22px auto;padding:0 16px 48px}.notice{border:1px solid #efd49a;background:#fff8e8;color:#654b16;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:.9rem}.panel{background:white;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:0 2px 8px #18372a0a}.panel h2{font-size:1.1rem;margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-weight:650;font-size:.92rem}input,textarea,select{width:100%;font:inherit;border:1px solid #bdcec7;border-radius:9px;padding:11px 12px;background:#fff;color:inherit}input:focus,textarea:focus,select:focus{outline:3px solid #176b5b28;border-color:var(--green)}textarea{min-height:75px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}button{font:inherit;border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:white;font-weight:650;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.secondary{background:#e8f0ed;color:#17302b}.danger{background:#fff0ef;color:var(--red)}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}.toolbar h2{margin:0}.toolbar input{max-width:310px}.summary{color:var(--muted);font-size:.9rem}.record{border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:10px;display:grid;grid-template-columns:1fr auto;gap:12px}.record h3{margin:0 0 5px;font-size:1.05rem;overflow-wrap:anywhere}.meta{color:var(--muted);font-size:.9rem;display:flex;gap:12px;flex-wrap:wrap}.note{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.record-actions{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}.record-actions button{padding:8px 10px;font-size:.88rem}.empty{padding:25px 8px;text-align:center;color:var(--muted)}.status{min-height:1.4em;color:var(--muted);font-size:.9rem;margin-top:10px}.status.error{color:var(--red)}.activity-item{border:1px solid var(--border);border-radius:12px;padding:13px;margin-top:10px}.activity-heading{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{display:inline-block;border-radius:99px;background:#e8f0ed;color:#315b50;padding:3px 9px;font-size:.82rem;font-weight:700}.badge.delete{background:#fff0ef;color:var(--red)}.activity-time{color:var(--muted);font-size:.88rem}.activity-name{font-weight:700;margin-top:7px}.activity-change{margin-top:7px;color:#405650;font-size:.9rem;white-space:pre-wrap;overflow-wrap:anywhere}.foot{color:var(--muted);font-size:.82rem;text-align:center;margin-top:18px}dialog{width:min(600px,calc(100% - 28px));max-height:80vh;border:0;border-radius:16px;padding:20px;box-shadow:0 12px 45px #0004}dialog::backdrop{background:#10241dcc}.history-item{padding:12px 0;border-bottom:1px solid var(--border)}.history-item:last-child{border-bottom:0}.history-item strong{display:block}.history-detail{font-size:.9rem;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:5px}@media(max-width:600px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.record{grid-template-columns:1fr}.record-actions{justify-content:flex-start}.panel{padding:15px}.wrap{margin-top:14px}}
+    *{box-sizing:border-box}body{margin:0}header{background:var(--green);color:white;padding:22px max(18px,calc((100% - 980px)/2))}h1{font-size:clamp(1.35rem,4vw,2rem);margin:0 0 5px}header p{margin:0;color:#e3f2ed;font-size:.95rem}.wrap{max-width:980px;margin:22px auto;padding:0 16px 48px}.notice{border:1px solid #efd49a;background:#fff8e8;color:#654b16;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:.9rem}.panel{background:white;border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:0 2px 8px #18372a0a}.panel h2{font-size:1.1rem;margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-weight:650;font-size:.92rem}input,textarea,select{width:100%;font:inherit;border:1px solid #bdcec7;border-radius:9px;padding:11px 12px;background:#fff;color:inherit}input:focus,textarea:focus,select:focus{outline:3px solid #176b5b28;border-color:var(--green)}textarea{min-height:75px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}button{font:inherit;border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:white;font-weight:650;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.secondary{background:#e8f0ed;color:#17302b}.danger{background:#fff0ef;color:var(--red)}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}.toolbar h2{margin:0}.toolbar input{max-width:310px}.summary{color:var(--muted);font-size:.9rem}.record{border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:10px;display:grid;grid-template-columns:1fr auto;gap:12px}.record h3{margin:0 0 5px;font-size:1.05rem;overflow-wrap:anywhere}.meta{color:var(--muted);font-size:.9rem;display:flex;gap:12px;flex-wrap:wrap}.note{margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.record-actions{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;justify-content:flex-end}.record-actions button{padding:8px 10px;font-size:.88rem}.empty{padding:25px 8px;text-align:center;color:var(--muted)}.status{min-height:1.4em;color:var(--muted);font-size:.9rem;margin-top:10px}.status.error{color:var(--red)}.activity-tools{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:10px;margin-bottom:12px}.activity-item{border:1px solid var(--border);border-radius:12px;margin-top:10px;overflow:hidden}.activity-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:13px;background:white;color:inherit;border-radius:0}.activity-header:hover{background:#f7faf8}.activity-heading{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{display:inline-block;border-radius:99px;background:#e8f0ed;color:#315b50;padding:3px 9px;font-size:.82rem;font-weight:700}.badge.delete{background:#fff0ef;color:var(--red)}.activity-time{color:var(--muted);font-size:.88rem}.activity-name{font-weight:700}.expand-icon{color:var(--green);font-size:.88rem;white-space:nowrap}.activity-change{display:none;margin:0;padding:13px;border-top:1px solid var(--border);color:#405650;font-size:.9rem;white-space:pre-wrap;overflow-wrap:anywhere}.activity-item.expanded .activity-change{display:block}.foot{color:var(--muted);font-size:.82rem;text-align:center;margin-top:18px}dialog{width:min(600px,calc(100% - 28px));max-height:80vh;border:0;border-radius:16px;padding:20px;box-shadow:0 12px 45px #0004}dialog::backdrop{background:#10241dcc}.history-item{padding:12px 0;border-bottom:1px solid var(--border)}.history-item:last-child{border-bottom:0}.history-item strong{display:block}.history-detail{font-size:.9rem;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:5px}@media(max-width:600px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.record{grid-template-columns:1fr}.record-actions{justify-content:flex-start}.panel{padding:15px}.wrap{margin-top:14px}.activity-tools{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -36,7 +36,11 @@
       <div id="records" aria-live="polite"></div>
     </section>
     <section class="panel" aria-labelledby="activity-title">
-      <div class="toolbar"><h2 id="activity-title">異動紀錄</h2><select id="activityFilter" aria-label="篩選異動類型"><option value="all">全部異動</option><option value="新增">新增</option><option value="修改">修改</option><option value="刪除">刪除</option></select></div>
+      <div class="toolbar"><h2 id="activity-title">異動紀錄</h2></div>
+      <div class="activity-tools">
+        <input id="activitySearch" type="search" placeholder="搜尋人孔名稱、方數、日期、備註或操作類型" aria-label="搜尋異動紀錄">
+        <select id="activityFilter" aria-label="篩選異動類型"><option value="all">全部異動</option><option value="新增">新增</option><option value="修改">修改</option><option value="刪除">刪除</option></select>
+      </div>
       <div id="activitySummary" class="summary">正在載入異動紀錄…</div>
       <div id="activityRecords" aria-live="polite"></div>
     </section>
@@ -74,209 +78,113 @@
     const activityBox = document.querySelector("#activityRecords");
     const activitySummary = document.querySelector("#activitySummary");
     const activityFilter = document.querySelector("#activityFilter");
+    const activitySearch = document.querySelector("#activitySearch");
     let records = [];
     let activities = [];
     let editingId = null;
 
-    const localDate = () => {
-      const now = new Date();
-      return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
-    };
+    const localDate = () => { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`; };
     dateInput.value = localDate();
-    function setStatus(message, isError=false) {
-      statusBox.textContent = message;
-      statusBox.classList.toggle("error", isError);
-    }
-    function safeText(tag, text, className) {
-      const el = document.createElement(tag);
-      if (className) el.className = className;
-      el.textContent = text ?? "";
-      return el;
-    }
+    function setStatus(message, isError=false) { statusBox.textContent = message; statusBox.classList.toggle("error", isError); }
+    function safeText(tag, text, className) { const el = document.createElement(tag); if (className) el.className = className; el.textContent = text ?? ""; return el; }
+    const actionLabels = {create:"新增", update:"修改", delete:"刪除", restore:"還原", "新增":"新增", "修改":"修改", "刪除（軟刪除）":"刪除"};
+    function printable(data) { if (!data) return "（無）"; return `人孔：${data.manholeName || "—"}\n方數：${data.volume ?? "—"} m³\n日期：${data.recordDate || "—"}${data.note ? `\n備註：${data.note}` : ""}`; }
+
     function render() {
       const term = searchInput.value.trim().toLocaleLowerCase();
       const active = records.filter(r => !r.deleted).sort((a,b) => (b.recordDate || "").localeCompare(a.recordDate || "") || (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
       const visible = active.filter(r => `${r.manholeName || ""} ${r.note || ""}`.toLocaleLowerCase().includes(term));
       summary.textContent = `共 ${active.length} 筆有效紀錄`;
       recordsBox.replaceChildren();
-      if (!visible.length) {
-        recordsBox.append(safeText("div", term ? "找不到符合的紀錄" : "尚無紀錄，請使用上方表單新增。", "empty"));
-        return;
-      }
+      if (!visible.length) { recordsBox.append(safeText("div", term ? "找不到符合的紀錄" : "尚無紀錄，請使用上方表單新增。", "empty")); return; }
       for (const record of visible) {
-        const card = document.createElement("article");
-        card.className = "record";
-        const details = document.createElement("div");
-        details.append(safeText("h3", record.manholeName || "（未命名）"));
-        const meta = document.createElement("div");
-        meta.className = "meta";
+        const card = document.createElement("article"); card.className = "record";
+        const details = document.createElement("div"); details.append(safeText("h3", record.manholeName || "（未命名）"));
+        const meta = document.createElement("div"); meta.className = "meta";
         meta.append(safeText("span", `方數：${record.volume ?? "—"} m³`), safeText("span", `日期：${record.recordDate || "—"}`));
-        details.append(meta);
-        if (record.note) details.append(safeText("p", record.note, "note"));
-        const buttons = document.createElement("div");
-        buttons.className = "record-actions";
-        const edit = safeText("button", "編輯"); edit.type = "button"; edit.className = "secondary";
-        edit.addEventListener("click", () => beginEdit(record));
-        const history = safeText("button", "修改紀錄"); history.type = "button"; history.className = "secondary";
-        history.addEventListener("click", () => showHistory(record));
-        const remove = safeText("button", "刪除"); remove.type = "button"; remove.className = "danger";
-        remove.addEventListener("click", () => removeRecord(record));
-        buttons.append(edit, history, remove);
-        card.append(details, buttons);
-        recordsBox.append(card);
+        details.append(meta); if (record.note) details.append(safeText("p", record.note, "note"));
+        const buttons = document.createElement("div"); buttons.className = "record-actions";
+        const edit = safeText("button", "編輯"); edit.type = "button"; edit.className = "secondary"; edit.addEventListener("click", () => beginEdit(record));
+        const history = safeText("button", "修改紀錄"); history.type = "button"; history.className = "secondary"; history.addEventListener("click", () => showHistory(record));
+        const remove = safeText("button", "刪除"); remove.type = "button"; remove.className = "danger"; remove.addEventListener("click", () => removeRecord(record));
+        buttons.append(edit, history, remove); card.append(details, buttons); recordsBox.append(card);
       }
     }
-    const actionLabels = {create:"新增", update:"修改", delete:"刪除", restore:"還原", "新增":"新增", "修改":"修改", "刪除（軟刪除）":"刪除"};
-    function printable(data) {
-      if (!data) return "（無）";
-      return `人孔：${data.manholeName || "—"}\n方數：${data.volume ?? "—"} m³\n日期：${data.recordDate || "—"}${data.note ? `\n備註：${data.note}` : ""}`;
-    }
+
     function renderActivities() {
       const filter = activityFilter.value;
-      const entries = activities.filter(item => filter === "all" || (actionLabels[item.action] || item.action) === filter);
-      activitySummary.textContent = `共 ${entries.length} 筆異動${filter === "all" ? "" : `（${filter}）`}`;
-      activityBox.replaceChildren();
-      if (!entries.length) {
-        activityBox.append(safeText("div", "目前沒有符合條件的異動紀錄。", "empty"));
-        return;
-      }
-      for (const item of entries) {
-        const row = document.createElement("article");
-        row.className = "activity-item";
-        const heading = document.createElement("div");
-        heading.className = "activity-heading";
+      const keyword = activitySearch.value.trim().toLocaleLowerCase();
+      const entries = activities.filter(item => {
         const label = actionLabels[item.action] || item.action || "異動";
-        const badge = safeText("span", label, "badge");
-        if (label === "刪除") badge.classList.add("delete");
-        heading.append(badge, safeText("span", item.changedAt?.toDate ? item.changedAt.toDate().toLocaleString("zh-TW") : "時間同步中", "activity-time"));
-        row.append(heading);
+        if (filter !== "all" && label !== filter) return false;
+        if (!keyword) return true;
+        const time = item.changedAt?.toDate ? item.changedAt.toDate().toLocaleString("zh-TW") : "";
+        const searchable = [label, time, printable(item.before), printable(item.after)].join(" ").toLocaleLowerCase();
+        return searchable.includes(keyword);
+      });
+      activitySummary.textContent = `共 ${entries.length} 筆符合條件的異動紀錄`;
+      activityBox.replaceChildren();
+      if (!entries.length) { activityBox.append(safeText("div", "目前沒有符合條件的異動紀錄。", "empty")); return; }
+      for (const item of entries) {
+        const row = document.createElement("article"); row.className = "activity-item";
+        const header = document.createElement("button"); header.type = "button"; header.className = "activity-header";
+        const heading = document.createElement("div"); heading.className = "activity-heading";
+        const label = actionLabels[item.action] || item.action || "異動";
+        const badge = safeText("span", label, "badge"); if (label === "刪除") badge.classList.add("delete");
         const current = item.after || item.before;
-        row.append(safeText("div", `人孔：${current?.manholeName || "（未命名）"}`, "activity-name"));
-        row.append(safeText("div", `異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`, "activity-change"));
-        activityBox.append(row);
+        heading.append(badge, safeText("span", current?.manholeName || "（未命名）", "activity-name"), safeText("span", item.changedAt?.toDate ? item.changedAt.toDate().toLocaleString("zh-TW") : "時間同步中", "activity-time"));
+        const icon = safeText("span", "展開 ▾", "expand-icon"); header.append(heading, icon);
+        const detail = safeText("div", `異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`, "activity-change");
+        header.addEventListener("click", () => { const expanded = row.classList.toggle("expanded"); icon.textContent = expanded ? "收起 ▴" : "展開 ▾"; header.setAttribute("aria-expanded", String(expanded)); });
+        header.setAttribute("aria-expanded", "false");
+        row.append(header, detail); activityBox.append(row);
       }
     }
-    function beginEdit(record) {
-      editingId = record.id;
-      nameInput.value = record.manholeName || "";
-      volumeInput.value = record.volume ?? "";
-      dateInput.value = record.recordDate || localDate();
-      noteInput.value = record.note || "";
-      document.querySelector("#form-title").textContent = "編輯紀錄";
-      saveButton.textContent = "儲存修改";
-      cancelEdit.hidden = false;
-      setStatus("正在編輯紀錄；儲存後會新增一筆修改紀錄。");
-      window.scrollTo({top: 0, behavior: "smooth"});
-      nameInput.focus();
-    }
-    function resetForm() {
-      editingId = null;
-      form.reset();
-      dateInput.value = localDate();
-      document.querySelector("#form-title").textContent = "新增紀錄";
-      saveButton.textContent = "新增紀錄";
-      cancelEdit.hidden = true;
-    }
-    function snapshot(record) {
-      return { manholeName: record.manholeName || "", volume: record.volume ?? null, recordDate: record.recordDate || "", note: record.note || "" };
-    }
-    function historyEntry(recordId, action, before, after) {
-      return { recordId, action, before: before || null, after: after || null, changedAt: serverTimestamp() };
-    }
+
+    function beginEdit(record) { editingId = record.id; nameInput.value = record.manholeName || ""; volumeInput.value = record.volume ?? ""; dateInput.value = record.recordDate || localDate(); noteInput.value = record.note || ""; document.querySelector("#form-title").textContent = "編輯紀錄"; saveButton.textContent = "儲存修改"; cancelEdit.hidden = false; setStatus("正在編輯紀錄；儲存後會新增一筆修改紀錄。"); window.scrollTo({top:0,behavior:"smooth"}); nameInput.focus(); }
+    function resetForm() { editingId = null; form.reset(); dateInput.value = localDate(); document.querySelector("#form-title").textContent = "新增紀錄"; saveButton.textContent = "新增紀錄"; cancelEdit.hidden = true; }
+    function snapshot(record) { return { manholeName: record.manholeName || "", volume: record.volume ?? null, recordDate: record.recordDate || "", note: record.note || "" }; }
+    function historyEntry(recordId, action, before, after) { return { recordId, action, before: before || null, after: after || null, changedAt: serverTimestamp() }; }
+
     form.addEventListener("submit", async event => {
       event.preventDefault();
-      const entry = { manholeName: nameInput.value.trim(), volume: Number(volumeInput.value), recordDate: dateInput.value, note: noteInput.value.trim() };
-      if (!entry.manholeName || !Number.isFinite(entry.volume) || entry.volume < 0 || !entry.recordDate) {
-        setStatus("請填寫有效的人孔名稱、非負數方數及日期。", true); return;
-      }
+      const entry = { manholeName:nameInput.value.trim(), volume:Number(volumeInput.value), recordDate:dateInput.value, note:noteInput.value.trim() };
+      if (!entry.manholeName || !Number.isFinite(entry.volume) || entry.volume < 0 || !entry.recordDate) { setStatus("請填寫有效的人孔名稱、非負數方數及日期。", true); return; }
       saveButton.disabled = true;
       try {
         if (editingId) {
-          const original = records.find(r => r.id === editingId);
-          if (!original) throw new Error("找不到這筆紀錄，請重新整理後再試。");
-          const batch = writeBatch(db);
-          batch.update(doc(db, "records", editingId), {...entry, updatedAt: serverTimestamp()});
-          batch.set(doc(historyRef), historyEntry(editingId, "修改", snapshot(original), entry));
-          await batch.commit();
-          setStatus("修改已儲存，並已追加異動紀錄。");
+          const original = records.find(r => r.id === editingId); if (!original) throw new Error("找不到這筆紀錄，請重新整理後再試。");
+          const batch = writeBatch(db); batch.update(doc(db,"records",editingId), {...entry, updatedAt:serverTimestamp()}); batch.set(doc(historyRef), historyEntry(editingId,"修改",snapshot(original),entry)); await batch.commit(); setStatus("修改已儲存，並已追加異動紀錄。");
         } else {
-          const recordDoc = doc(recordsRef);
-          const batch = writeBatch(db);
-          batch.set(recordDoc, {...entry, deleted: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp()});
-          batch.set(doc(historyRef), historyEntry(recordDoc.id, "新增", null, entry));
-          await batch.commit();
-          setStatus("紀錄已新增。");
+          const recordDoc = doc(recordsRef); const batch = writeBatch(db); batch.set(recordDoc,{...entry,deleted:false,createdAt:serverTimestamp(),updatedAt:serverTimestamp()}); batch.set(doc(historyRef), historyEntry(recordDoc.id,"新增",null,entry)); await batch.commit(); setStatus("紀錄已新增。");
         }
         resetForm();
-      } catch (error) {
-        console.error(error);
-        setStatus(`儲存失敗：${error.message || "請確認 Firestore 已建立且規則允許存取。"}`, true);
-      } finally { saveButton.disabled = false; }
+      } catch (error) { console.error(error); setStatus(`儲存失敗：${error.message || "請確認 Firestore 已建立且規則允許存取。"}`, true); }
+      finally { saveButton.disabled = false; }
     });
     cancelEdit.addEventListener("click", () => { resetForm(); setStatus("已取消編輯。"); });
 
     async function removeRecord(record) {
       if (!window.confirm(`確定將「${record.manholeName}」這筆紀錄刪除？\n\n刪除後會從一般列表隱藏，並保留異動紀錄。`)) return;
-      try {
-        const batch = writeBatch(db);
-        batch.update(doc(db, "records", record.id), {deleted: true, deletedAt: serverTimestamp(), updatedAt: serverTimestamp()});
-        batch.set(doc(historyRef), historyEntry(record.id, "刪除（軟刪除）", snapshot(record), null));
-        await batch.commit();
-        if (editingId === record.id) resetForm();
-        setStatus("紀錄已刪除並保留異動歷史。");
-      } catch (error) {
-        console.error(error); setStatus(`刪除失敗：${error.message || "請稍後再試。"}`, true);
-      }
+      try { const batch = writeBatch(db); batch.update(doc(db,"records",record.id),{deleted:true,deletedAt:serverTimestamp(),updatedAt:serverTimestamp()}); batch.set(doc(historyRef),historyEntry(record.id,"刪除（軟刪除）",snapshot(record),null)); await batch.commit(); if (editingId === record.id) resetForm(); setStatus("紀錄已刪除並保留異動歷史。"); }
+      catch (error) { console.error(error); setStatus(`刪除失敗：${error.message || "請稍後再試。"}`, true); }
     }
+
     async function showHistory(record) {
-      const dialog = document.querySelector("#historyDialog");
-      document.querySelector("#historyTitle").textContent = `修改紀錄｜${record.manholeName || "未命名"}`;
-      const content = document.querySelector("#historyContent");
-      content.replaceChildren(safeText("div", "載入中…", "empty"));
-      dialog.showModal();
-      try {
-        const result = await getDocs(query(historyRef, where("recordId", "==", record.id)));
-        const entries = result.docs.map(d => d.data()).sort((a,b) => (b.changedAt?.toMillis?.() || 0) - (a.changedAt?.toMillis?.() || 0));
-        content.replaceChildren();
-        if (!entries.length) { content.append(safeText("div", "尚無異動紀錄。", "empty")); return; }
-        for (const item of entries) {
-          const row = document.createElement("div"); row.className = "history-item";
-          const time = item.changedAt?.toDate ? item.changedAt.toDate().toLocaleString("zh-TW") : "時間同步中";
-          row.append(safeText("strong", `${actionLabels[item.action] || item.action || "異動"} · ${time}`));
-          row.append(safeText("div", `變更前：\n${printable(item.before)}\n\n變更後：\n${printable(item.after)}`, "history-detail"));
-          content.append(row);
-        }
-      } catch (error) {
-        console.error(error); content.replaceChildren(safeText("div", `讀取異動紀錄失敗：${error.message || "請確認 Firestore 規則允許讀取 history。"}`, "empty"));
-      }
+      const dialog = document.querySelector("#historyDialog"); document.querySelector("#historyTitle").textContent = `修改紀錄｜${record.manholeName || "未命名"}`;
+      const content = document.querySelector("#historyContent"); content.replaceChildren(safeText("div","載入中…","empty")); dialog.showModal();
+      try { const result = await getDocs(query(historyRef,where("recordId","==",record.id))); const entries=result.docs.map(d=>d.data()).sort((a,b)=>(b.changedAt?.toMillis?.()||0)-(a.changedAt?.toMillis?.()||0)); content.replaceChildren(); if (!entries.length){content.append(safeText("div","尚無異動紀錄。","empty"));return;} for(const item of entries){const row=document.createElement("div");row.className="history-item";const time=item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"時間同步中";row.append(safeText("strong",`${actionLabels[item.action]||item.action||"異動"} · ${time}`));row.append(safeText("div",`變更前：\n${printable(item.before)}\n\n變更後：\n${printable(item.after)}`,"history-detail"));content.append(row);} }
+      catch(error){console.error(error);content.replaceChildren(safeText("div",`讀取異動紀錄失敗：${error.message||"請確認 Firestore 規則允許讀取 history。"}`,"empty"));}
     }
-    document.querySelector("#closeHistory").addEventListener("click", () => document.querySelector("#historyDialog").close());
-    document.querySelector("#historyDialog").addEventListener("click", event => { if (event.target === event.currentTarget) event.currentTarget.close(); });
-    searchInput.addEventListener("input", render);
-    activityFilter.addEventListener("change", renderActivities);
-    document.querySelector("#exportCsv").addEventListener("click", () => {
-      const data = records.filter(r => !r.deleted).sort((a,b) => (b.recordDate || "").localeCompare(a.recordDate || ""));
-      if (!data.length) { setStatus("目前沒有可匯出的紀錄。", true); return; }
-      const quote = value => `"${String(value ?? "").replaceAll('"','""')}"`;
-      const lines = [["人孔名稱","澆置方數(m³)","紀錄日期","備註"], ...data.map(r => [r.manholeName,r.volume,r.recordDate,r.note])].map(row => row.map(quote).join(","));
-      const blob = new Blob(["\ufeff" + lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
-      const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `立坑封底方數紀錄_${localDate()}.csv`; link.click(); URL.revokeObjectURL(link.href);
-    });
-    onSnapshot(recordsRef, snap => {
-      records = snap.docs.map(d => ({id:d.id,...d.data()}));
-      render();
-      if (!statusBox.textContent) setStatus("資料已同步。");
-    }, error => {
-      console.error(error); summary.textContent = "無法連線資料庫";
-      setStatus(`讀取失敗：${error.message || "請檢查 Firestore 是否已建立及規則是否已發佈。"}`, true);
-    });
-    onSnapshot(historyRef, snap => {
-      activities = snap.docs.map(d => ({id:d.id,...d.data()})).sort((a,b) => (b.changedAt?.toMillis?.() || 0) - (a.changedAt?.toMillis?.() || 0));
-      renderActivities();
-    }, error => {
-      console.error(error); activitySummary.textContent = `載入異動紀錄失敗：${error.message || "請確認 Firestore 規則允許讀取 history。"}`;
-    });
-    if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(console.warn));
+
+    document.querySelector("#closeHistory").addEventListener("click",()=>document.querySelector("#historyDialog").close());
+    document.querySelector("#historyDialog").addEventListener("click",event=>{if(event.target===event.currentTarget)event.currentTarget.close();});
+    searchInput.addEventListener("input",render); activityFilter.addEventListener("change",renderActivities); activitySearch.addEventListener("input",renderActivities);
+    document.querySelector("#exportCsv").addEventListener("click",()=>{const data=records.filter(r=>!r.deleted).sort((a,b)=>(b.recordDate||"").localeCompare(a.recordDate||""));if(!data.length){setStatus("目前沒有可匯出的紀錄。",true);return;}const quote=value=>`"${String(value??"").replaceAll('"','""')}"`;const lines=[["人孔名稱","澆置方數(m³)","紀錄日期","備註"],...data.map(r=>[r.manholeName,r.volume,r.recordDate,r.note])].map(row=>row.map(quote).join(","));const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});const link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=`立坑封底方數紀錄_${localDate()}.csv`;link.click();URL.revokeObjectURL(link.href);});
+
+    onSnapshot(recordsRef,snap=>{records=snap.docs.map(d=>({id:d.id,...d.data()}));render();if(!statusBox.textContent)setStatus("資料已同步。");},error=>{console.error(error);summary.textContent="無法連線資料庫";setStatus(`讀取失敗：${error.message||"請檢查 Firestore 是否已建立及規則是否已發佈。"}`,true);});
+    onSnapshot(historyRef,snap=>{activities=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.changedAt?.toMillis?.()||0)-(a.changedAt?.toMillis?.()||0));renderActivities();},error=>{console.error(error);activitySummary.textContent=`載入異動紀錄失敗：${error.message||"請確認 Firestore 規則允許讀取 history。"}`;});
+    if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(console.warn));
   </script>
 </body>
 </html>
