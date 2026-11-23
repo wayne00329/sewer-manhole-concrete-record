@@ -38,118 +38,38 @@
     <details class="panel activity-panel" aria-labelledby="activity-title">
       <summary id="activity-title">異動紀錄</summary>
       <div class="toolbar"><div id="activitySummary" class="summary">正在載入異動紀錄…</div><button id="deleteSelected" class="danger" type="button" disabled>刪除選取紀錄（0）</button></div>
-      <div class="activity-tools">
-        <input id="activitySearch" type="search" placeholder="搜尋人孔名稱、方數、日期、備註或操作類型" aria-label="搜尋異動紀錄">
-        <select id="activityFilter" aria-label="篩選異動類型"><option value="all">全部異動</option><option value="新增">新增</option><option value="修改">修改</option><option value="刪除">刪除</option><option value="還原">還原</option></select>
-      </div>
+      <div class="activity-tools"><input id="activitySearch" type="search" placeholder="搜尋人孔名稱、方數、日期、備註或操作類型" aria-label="搜尋異動紀錄"><select id="activityFilter" aria-label="篩選異動類型"><option value="all">全部異動</option><option value="新增">新增</option><option value="修改">修改</option><option value="刪除">刪除</option><option value="還原">還原</option></select></div>
       <div id="activityRecords" aria-live="polite"></div>
     </details>
     <p class="foot">資料存放於 Firebase Firestore；需連線網路才能即時讀寫及同步。</p>
   </main>
   <dialog id="historyDialog"><div class="toolbar"><h2 id="historyTitle">修改紀錄</h2><button id="closeHistory" class="secondary" type="button">關閉</button></div><div id="historyContent"></div></dialog>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, collection, doc, writeBatch, onSnapshot, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    const firebaseConfig = {apiKey:"AIzaSyBUBbTx4tOuYxl_2VqST0zIa1HV_IuFJqM",authDomain:"manhole-bottom-pouring-record.firebaseapp.com",projectId:"manhole-bottom-pouring-record",storageBucket:"manhole-bottom-pouring-record.firebasestorage.app",messagingSenderId:"296383551211",appId:"1:296383551211:web:f6fbe7b8d2cf1f971f10ae",measurementId:"G-NH254EVBZL"};
-    const db = getFirestore(initializeApp(firebaseConfig)), recordsRef = collection(db,"records"), historyRef = collection(db,"history");
-    const $ = selector => document.querySelector(selector);
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {getFirestore,collection,doc,writeBatch,onSnapshot,query,where,getDocs,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    const firebaseConfig={apiKey:"AIzaSyBUBbTx4tOuYxl_2VqST0zIa1HV_IuFJqM",authDomain:"manhole-bottom-pouring-record.firebaseapp.com",projectId:"manhole-bottom-pouring-record",storageBucket:"manhole-bottom-pouring-record.firebasestorage.app",messagingSenderId:"296383551211",appId:"1:296383551211:web:f6fbe7b8d2cf1f971f10ae",measurementId:"G-NH254EVBZL"};
+    const db=getFirestore(initializeApp(firebaseConfig)),recordsRef=collection(db,"records"),historyRef=collection(db,"history"),$=selector=>document.querySelector(selector);
     const form=$("#recordForm"),nameInput=$("#manholeName"),volumeInput=$("#volume"),dateInput=$("#recordDate"),noteInput=$("#note"),saveButton=$("#saveButton"),cancelEdit=$("#cancelEdit"),statusBox=$("#status"),recordsBox=$("#records"),searchInput=$("#search"),summary=$("#summary"),activityBox=$("#activityRecords"),activitySummary=$("#activitySummary"),activityFilter=$("#activityFilter"),activitySearch=$("#activitySearch"),deleteSelectedButton=$("#deleteSelected");
-    let records=[],activities=[],editingId=null;
-    const selectedActivityIds=new Set();
-    const localDate=()=>{const now=new Date();return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;};
-    dateInput.value=localDate();
+    let records=[],activities=[],editingId=null;const selectedActivityIds=new Set();
+    const localDate=()=>{const now=new Date();return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;};dateInput.value=localDate();
     function setStatus(message,isError=false){statusBox.textContent=message;statusBox.classList.toggle("error",isError);}
     function safeText(tag,text,className){const el=document.createElement(tag);if(className)el.className=className;el.textContent=text??"";return el;}
     const actionLabels={create:"新增",update:"修改",delete:"刪除",restore:"還原","新增":"新增","修改":"修改","刪除（軟刪除）":"刪除"};
     function printable(data){if(!data)return "（無）";return `人孔：${data.manholeName||"—"}\n方數：${data.volume??"—"} m³\n日期：${data.recordDate||"—"}${data.note?`\n備註：${data.note}`:""}`;}
     function updateDeleteSelectedButton(){deleteSelectedButton.textContent=`刪除選取紀錄（${selectedActivityIds.size}）`;deleteSelectedButton.disabled=selectedActivityIds.size===0;}
-
-    function render(){
-      const term=searchInput.value.trim().toLocaleLowerCase();
-      const active=records.filter(r=>!r.deleted).sort((a,b)=>(b.recordDate||"").localeCompare(a.recordDate||"")||(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
-      const visible=active.filter(r=>`${r.manholeName||""} ${r.note||""}`.toLocaleLowerCase().includes(term));
-      summary.textContent=`共 ${active.length} 筆有效紀錄`;recordsBox.replaceChildren();
-      if(!visible.length){recordsBox.append(safeText("div",term?"找不到符合的紀錄":"尚無紀錄，請使用上方表單新增。","empty"));return;}
-      for(const record of visible){
-        const card=document.createElement("article");card.className="record";const details=document.createElement("div");details.append(safeText("h3",record.manholeName||"（未命名）"));
-        const meta=document.createElement("div");meta.className="meta";meta.append(safeText("span",`方數：${record.volume??"—"} m³`),safeText("span",`日期：${record.recordDate||"—"}`));details.append(meta);if(record.note)details.append(safeText("p",record.note,"note"));
-        const buttons=document.createElement("div");buttons.className="record-actions";
-        const edit=safeText("button","編輯");edit.type="button";edit.className="secondary";edit.addEventListener("click",()=>beginEdit(record));
-        const history=safeText("button","修改紀錄");history.type="button";history.className="secondary";history.addEventListener("click",()=>showHistory(record));
-        const remove=safeText("button","刪除");remove.type="button";remove.className="danger";remove.addEventListener("click",()=>removeRecord(record));
-        buttons.append(edit,history,remove);card.append(details,buttons);recordsBox.append(card);
-      }
-    }
-
-    function renderActivities(){
-      const filter=activityFilter.value,keyword=activitySearch.value.trim().toLocaleLowerCase();
-      const entries=activities.filter(item=>{const label=actionLabels[item.action]||item.action||"異動";if(filter!=="all"&&label!==filter)return false;if(!keyword)return true;const time=item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"";return [label,time,printable(item.before),printable(item.after)].join(" ").toLocaleLowerCase().includes(keyword);});
-      activitySummary.textContent=`共 ${entries.length} 筆符合條件的異動紀錄`;activityBox.replaceChildren();
-      if(!entries.length){activityBox.append(safeText("div","目前沒有符合條件的異動紀錄。","empty"));updateDeleteSelectedButton();return;}
-      for(const item of entries){
-        const row=document.createElement("article");row.className="activity-item";
-        const selectLabel=document.createElement("label");selectLabel.className="activity-select";selectLabel.setAttribute("aria-label","選取此筆異動紀錄");
-        const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.checked=selectedActivityIds.has(item.id);checkbox.setAttribute("aria-label",`選取${(item.after||item.before)?.manholeName||"未命名"}的異動紀錄`);
-        checkbox.addEventListener("change",()=>{if(checkbox.checked)selectedActivityIds.add(item.id);else selectedActivityIds.delete(item.id);updateDeleteSelectedButton();});selectLabel.append(checkbox);
-        const content=document.createElement("div");content.className="activity-content";
-        const header=document.createElement("button");header.type="button";header.className="activity-header";
-        const heading=document.createElement("div");heading.className="activity-heading";const label=actionLabels[item.action]||item.action||"異動";
-        const badge=safeText("span",label,"badge");if(label==="刪除")badge.classList.add("delete");const current=item.after||item.before;
-        heading.append(badge,safeText("span",current?.manholeName||"（未命名）","activity-name"),safeText("span",item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"時間載入中","activity-time"));
-        const icon=safeText("span","展開 ▾","expand-icon");header.append(heading,icon);
-        const detail=safeText("div",`異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`,"activity-change");
-        header.setAttribute("aria-expanded","false");header.addEventListener("click",()=>{const expanded=row.classList.toggle("expanded");icon.textContent=expanded?"收起 ▴":"展開 ▾";header.setAttribute("aria-expanded",String(expanded));});
-        content.append(header,detail);row.append(selectLabel,content);activityBox.append(row);
-      }
-      updateDeleteSelectedButton();
-    }
-
+    function render(){const term=searchInput.value.trim().toLocaleLowerCase(),active=records.filter(r=>!r.deleted).sort((a,b)=>(b.recordDate||"").localeCompare(a.recordDate||"")||(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0)),visible=active.filter(r=>`${r.manholeName||""} ${r.note||""}`.toLocaleLowerCase().includes(term));summary.textContent=`共 ${active.length} 筆有效紀錄`;recordsBox.replaceChildren();if(!visible.length){recordsBox.append(safeText("div",term?"找不到符合的紀錄":"尚無紀錄，請使用上方表單新增。","empty"));return;}for(const record of visible){const card=document.createElement("article");card.className="record";const details=document.createElement("div");details.append(safeText("h3",record.manholeName||"（未命名）"));const meta=document.createElement("div");meta.className="meta";meta.append(safeText("span",`方數：${record.volume??"—"} m³`),safeText("span",`日期：${record.recordDate||"—"}`));details.append(meta);if(record.note)details.append(safeText("p",record.note,"note"));const buttons=document.createElement("div");buttons.className="record-actions";const edit=safeText("button","編輯");edit.type="button";edit.className="secondary";edit.addEventListener("click",()=>beginEdit(record));const history=safeText("button","修改紀錄");history.type="button";history.className="secondary";history.addEventListener("click",()=>showHistory(record));const remove=safeText("button","刪除");remove.type="button";remove.className="danger";remove.addEventListener("click",()=>removeRecord(record));buttons.append(edit,history,remove);card.append(details,buttons);recordsBox.append(card);}}
+    function renderActivities(){const filter=activityFilter.value,keyword=activitySearch.value.trim().toLocaleLowerCase(),entries=activities.filter(item=>{const label=actionLabels[item.action]||item.action||"異動";if(filter!=="all"&&label!==filter)return false;if(!keyword)return true;const time=item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"";return [label,time,printable(item.before),printable(item.after)].join(" ").toLocaleLowerCase().includes(keyword);});activitySummary.textContent=`共 ${entries.length} 筆符合條件的異動紀錄`;activityBox.replaceChildren();if(!entries.length){activityBox.append(safeText("div","目前沒有符合條件的異動紀錄。","empty"));updateDeleteSelectedButton();return;}for(const item of entries){const row=document.createElement("article");row.className="activity-item";const selectLabel=document.createElement("label");selectLabel.className="activity-select";selectLabel.setAttribute("aria-label","選取此筆異動紀錄");const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.checked=selectedActivityIds.has(item.id);checkbox.setAttribute("aria-label",`選取${(item.after||item.before)?.manholeName||"未命名"}的異動紀錄`);checkbox.addEventListener("change",()=>{if(checkbox.checked)selectedActivityIds.add(item.id);else selectedActivityIds.delete(item.id);updateDeleteSelectedButton();});selectLabel.append(checkbox);const content=document.createElement("div");content.className="activity-content";const header=document.createElement("button");header.type="button";header.className="activity-header";const heading=document.createElement("div");heading.className="activity-heading";const label=actionLabels[item.action]||item.action||"異動";const badge=safeText("span",label,"badge");if(label==="刪除")badge.classList.add("delete");const current=item.after||item.before;heading.append(badge,safeText("span",current?.manholeName||"（未命名）","activity-name"),safeText("span",item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"時間載入中","activity-time"));const icon=safeText("span","展開 ▾","expand-icon");header.append(heading,icon);const detail=safeText("div",`異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`,"activity-change");header.setAttribute("aria-expanded","false");header.addEventListener("click",()=>{const expanded=row.classList.toggle("expanded");icon.textContent=expanded?"收起 ▴":"展開 ▾";header.setAttribute("aria-expanded",String(expanded));});content.append(header,detail);row.append(selectLabel,content);activityBox.append(row);}updateDeleteSelectedButton();}
     function beginEdit(record){editingId=record.id;nameInput.value=record.manholeName||"";volumeInput.value=record.volume??"";dateInput.value=record.recordDate||localDate();noteInput.value=record.note||"";$("#form-title").textContent="編輯紀錄";saveButton.textContent="儲存修改";cancelEdit.hidden=false;setStatus("正在編輯紀錄。請修改後儲存。");window.scrollTo({top:0,behavior:"smooth"});nameInput.focus();}
     function resetForm(){editingId=null;form.reset();dateInput.value=localDate();$("#form-title").textContent="新增紀錄";saveButton.textContent="新增紀錄";cancelEdit.hidden=true;}
     function snapshot(record){return {manholeName:record.manholeName||"",volume:record.volume??null,recordDate:record.recordDate||"",note:record.note||""};}
     function historyEntry(recordId,action,before,after){return {recordId,action,before:before||null,after:after||null,changedAt:serverTimestamp()};}
-
-    form.addEventListener("submit",async event=>{
-      event.preventDefault();const entry={manholeName:nameInput.value.trim(),volume:Number(volumeInput.value),recordDate:dateInput.value,note:noteInput.value.trim()};
-      if(!entry.manholeName||!Number.isFinite(entry.volume)||entry.volume<0||!entry.recordDate){setStatus("請填寫有效的人孔名稱、非負數方數及日期。",true);return;}
-      saveButton.disabled=true;
-      try{const batch=writeBatch(db);if(editingId){const original=records.find(r=>r.id===editingId);if(!original)throw new Error("找不到這筆紀錄，請重新整理後再試。");batch.update(doc(db,"records",editingId),{...entry,updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(editingId,"修改",snapshot(original),entry));await batch.commit();setStatus("修改已儲存，並已記錄異動。");}else{const recordDoc=doc(recordsRef);batch.set(recordDoc,{...entry,deleted:false,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(recordDoc.id,"新增",null,entry));await batch.commit();setStatus("紀錄已新增。");}resetForm();}
-      catch(error){console.error(error);setStatus(`儲存失敗：${error.message||"請確認 Firestore 已建立且規則允許存取。"}`,true);}finally{saveButton.disabled=false;}
-    });
+    form.addEventListener("submit",async event=>{event.preventDefault();const entry={manholeName:nameInput.value.trim(),volume:Number(volumeInput.value),recordDate:dateInput.value,note:noteInput.value.trim()};if(!entry.manholeName||!Number.isFinite(entry.volume)||entry.volume<0||!entry.recordDate){setStatus("請填寫有效的人孔名稱、非負數方數及日期。",true);return;}saveButton.disabled=true;try{const batch=writeBatch(db);if(editingId){const original=records.find(r=>r.id===editingId);if(!original)throw new Error("找不到這筆紀錄，請重新整理後再試。");batch.update(doc(db,"records",editingId),{...entry,updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(editingId,"修改",snapshot(original),entry));await batch.commit();setStatus("修改已儲存，並已記錄異動。");}else{const recordDoc=doc(recordsRef);batch.set(recordDoc,{...entry,deleted:false,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(recordDoc.id,"新增",null,entry));await batch.commit();setStatus("紀錄已新增。");}resetForm();}catch(error){console.error(error);setStatus(`儲存失敗：${error.message||"請確認 Firestore 已建立且規則允許存取。"}`,true);}finally{saveButton.disabled=false;}});
     cancelEdit.addEventListener("click",()=>{resetForm();setStatus("已取消編輯。");});
-
-    async function removeRecord(record){
-      if(!window.confirm(`確定將「${record.manholeName}」這筆紀錄刪除？\n\n刪除後會從一般列表隱藏，並保留異動紀錄。`))return;
-      try{const batch=writeBatch(db);batch.update(doc(db,"records",record.id),{deleted:true,deletedAt:serverTimestamp(),updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(record.id,"刪除（軟刪除）",snapshot(record),null));await batch.commit();if(editingId===record.id)resetForm();setStatus("紀錄已刪除，異動紀錄已保留。");}
-      catch(error){console.error(error);setStatus(`刪除失敗：${error.message||"請稍後再試。"}`,true);}
-    }
-
-    deleteSelectedButton.addEventListener("click",async()=>{
-      const selected=activities.filter(item=>selectedActivityIds.has(item.id));if(!selected.length){selectedActivityIds.clear();updateDeleteSelectedButton();return;}
-      const todayCode=localDate().slice(5).replace("-","");
-      const enteredCode=window.prompt(`你選取了 ${selected.length} 筆異動紀錄。\n請輸入今天的四位數安全碼（月日，例如 11 月 23 日輸入 1123）：`);
-      if(enteredCode===null)return;
-      if(enteredCode.trim()!==todayCode){window.alert("安全碼錯誤，沒有刪除任何紀錄。");return;}
-      const names=selected.slice(0,5).map(item=>(item.after||item.before)?.manholeName||"未命名").join("、");
-      const more=selected.length>5?` 等 ${selected.length} 筆`:"";
-      if(!window.confirm(`最後確認：確定永久刪除所選的 ${selected.length} 筆異動紀錄（${names}${more}）？\n\n只會刪除已勾選的異動紀錄，不會刪除一般紀錄。此操作無法復原。`))return;
-      deleteSelectedButton.disabled=true;
-      try{
-        for(let start=0;start<selected.length;start+=450){const batch=writeBatch(db);for(const item of selected.slice(start,start+450))batch.delete(doc(historyRef,item.id));await batch.commit();}
-        selected.forEach(item=>selectedActivityIds.delete(item.id));setStatus(`已永久刪除選取的 ${selected.length} 筆異動紀錄。`);renderActivities();
-      }catch(error){console.error(error);setStatus(`刪除異動紀錄失敗：${error.message||"請確認 Firestore 規則允許刪除 history。"}`,true);updateDeleteSelectedButton();}
-    });
-
-    async function showHistory(record){
-      const dialog=$("#historyDialog");$("#historyTitle").textContent=`修改紀錄｜${record.manholeName||"未命名"}`;const content=$("#historyContent");content.replaceChildren(safeText("div","載入中…","empty"));dialog.showModal();
-      try{const result=await getDocs(query(historyRef,where("recordId","==",record.id)));const entries=result.docs.map(item=>item.data()).sort((a,b)=>(b.changedAt?.toMillis?.()||0)-(a.changedAt?.toMillis?.()||0));content.replaceChildren();if(!entries.length){content.append(safeText("div","尚無修改紀錄。","empty"));return;}for(const item of entries){const row=document.createElement("div");row.className="history-item";const time=item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"時間載入中";row.append(safeText("strong",`${actionLabels[item.action]||item.action||"異動"} · ${time}`),safeText("div",`異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`,"history-detail"));content.append(row);}}
-      catch(error){console.error(error);content.replaceChildren(safeText("div",`讀取異動紀錄失敗：${error.message||"請確認 Firestore 規則允許讀取 history。"}`,"empty"));}
-    }
-
-    $("#closeHistory").addEventListener("click",()=>$("#historyDialog").close());$("#historyDialog").addEventListener("click",event=>{if(event.target===event.currentTarget)event.currentTarget.close();});
-    searchInput.addEventListener("input",render);activityFilter.addEventListener("change",renderActivities);activitySearch.addEventListener("input",renderActivities);
-    $("#exportCsv").addEventListener("click",()=>{const data=records.filter(r=>!r.deleted).sort((a,b)=>(b.recordDate||"").localeCompare(a.recordDate||""));if(!data.length){setStatus("沒有可匯出的紀錄。",true);return;}const quote=value=>`"${String(value??"").replaceAll('"','""')}"`;const lines=[["人孔名稱","澆置方數（m³）","紀錄日期","備註"],...data.map(r=>[r.manholeName,r.volume,r.recordDate,r.note])].map(row=>row.map(quote).join(","));const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});const link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=`立坑封底方數紀錄_${localDate()}.csv`;link.click();URL.revokeObjectURL(link.href);});
+    async function removeRecord(record){if(!window.confirm(`確定將「${record.manholeName}」這筆紀錄刪除？\n\n刪除後會從一般列表隱藏，並保留異動紀錄。`))return;try{const batch=writeBatch(db);batch.update(doc(db,"records",record.id),{deleted:true,deletedAt:serverTimestamp(),updatedAt:serverTimestamp()});batch.set(doc(historyRef),historyEntry(record.id,"刪除（軟刪除）",snapshot(record),null));await batch.commit();if(editingId===record.id)resetForm();setStatus("紀錄已刪除，異動紀錄已保留。");}catch(error){console.error(error);setStatus(`刪除失敗：${error.message||"請稍後再試。"}`,true);}}
+    deleteSelectedButton.addEventListener("click",async()=>{const selected=activities.filter(item=>selectedActivityIds.has(item.id));if(!selected.length){selectedActivityIds.clear();updateDeleteSelectedButton();return;}const todayCode=localDate().slice(5).replace("-","");const enteredCode=window.prompt("請輸入安全碼：");if(enteredCode===null)return;if(enteredCode.trim()!==todayCode){window.alert("安全碼錯誤，沒有刪除任何紀錄。");return;}const names=selected.slice(0,5).map(item=>(item.after||item.before)?.manholeName||"未命名").join("、"),more=selected.length>5?` 等 ${selected.length} 筆`:"";if(!window.confirm(`最後確認：確定永久刪除所選的 ${selected.length} 筆異動紀錄（${names}${more}）？\n\n只會刪除已勾選的異動紀錄，不會刪除一般紀錄。此操作無法復原。`))return;deleteSelectedButton.disabled=true;try{for(let start=0;start<selected.length;start+=450){const batch=writeBatch(db);for(const item of selected.slice(start,start+450))batch.delete(doc(historyRef,item.id));await batch.commit();}selected.forEach(item=>selectedActivityIds.delete(item.id));setStatus(`已永久刪除選取的 ${selected.length} 筆異動紀錄。`);renderActivities();}catch(error){console.error(error);const message=error.code==="permission-denied"?"Firestore 權限規則拒絕刪除。請在 Firebase Console 的 Firestore Rules 允許管理者刪除 history 文件後再試。":`刪除異動紀錄失敗：${error.message||"請稍後再試。"}`;setStatus(message,true);window.alert(message);updateDeleteSelectedButton();}});
+    async function showHistory(record){const dialog=$("#historyDialog");$("#historyTitle").textContent=`修改紀錄｜${record.manholeName||"未命名"}`;const content=$("#historyContent");content.replaceChildren(safeText("div","載入中…","empty"));dialog.showModal();try{const result=await getDocs(query(historyRef,where("recordId","==",record.id))),entries=result.docs.map(item=>item.data()).sort((a,b)=>(b.changedAt?.toMillis?.()||0)-(a.changedAt?.toMillis?.()||0));content.replaceChildren();if(!entries.length){content.append(safeText("div","尚無修改紀錄。","empty"));return;}for(const item of entries){const row=document.createElement("div");row.className="history-item";const time=item.changedAt?.toDate?item.changedAt.toDate().toLocaleString("zh-TW"):"時間載入中";row.append(safeText("strong",`${actionLabels[item.action]||item.action||"異動"} · ${time}`),safeText("div",`異動前：\n${printable(item.before)}\n\n異動後：\n${printable(item.after)}`,"history-detail"));content.append(row);}}catch(error){console.error(error);content.replaceChildren(safeText("div",`讀取異動紀錄失敗：${error.message||"請確認 Firestore 規則允許讀取 history。"}`,"empty"));}}
+    $("#closeHistory").addEventListener("click",()=>$("#historyDialog").close());$("#historyDialog").addEventListener("click",event=>{if(event.target===event.currentTarget)event.currentTarget.close();});searchInput.addEventListener("input",render);activityFilter.addEventListener("change",renderActivities);activitySearch.addEventListener("input",renderActivities);
+    $("#exportCsv").addEventListener("click",()=>{const data=records.filter(r=>!r.deleted).sort((a,b)=>(b.recordDate||"").localeCompare(a.recordDate||""));if(!data.length){setStatus("沒有可匯出的紀錄。",true);return;}const quote=value=>`"${String(value??"").replaceAll('"','""')}"`,lines=[["人孔名稱","澆置方數（m³）","紀錄日期","備註"],...data.map(r=>[r.manholeName,r.volume,r.recordDate,r.note])].map(row=>row.map(quote).join(",")),blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=`立坑封底方數紀錄_${localDate()}.csv`;link.click();URL.revokeObjectURL(link.href);});
     onSnapshot(recordsRef,snap=>{records=snap.docs.map(item=>({id:item.id,...item.data()}));render();if(!statusBox.textContent)setStatus("資料已同步。");},error=>{console.error(error);summary.textContent="無法載入紀錄";setStatus(`資料載入失敗：${error.message||"請確認網路與 Firestore 規則。"}`,true);});
     onSnapshot(historyRef,snap=>{activities=snap.docs.map(item=>({id:item.id,...item.data()})).sort((a,b)=>(b.changedAt?.toMillis?.()||0)-(a.changedAt?.toMillis?.()||0));const validIds=new Set(activities.map(item=>item.id));for(const id of selectedActivityIds)if(!validIds.has(id))selectedActivityIds.delete(id);renderActivities();},error=>{console.error(error);activitySummary.textContent=`無法載入異動紀錄：${error.message||"請確認 Firestore 規則。"}`;});
     if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(console.warn));
